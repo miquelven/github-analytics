@@ -6,7 +6,7 @@ export const github = new Octokit({
     debug: () => {},
     info: () => {},
     warn: console.warn,
-    error: () => {},
+    error: console.error,
   },
 });
 
