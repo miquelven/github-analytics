@@ -23,7 +23,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (savedLang && (savedLang === "en" || savedLang === "pt")) {
       setLanguageState(savedLang);
     } else {
-        // Detect browser language
         const browserLang = navigator.language.startsWith('pt') ? 'pt' : 'en';
         setLanguageState(browserLang);
     }

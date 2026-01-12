@@ -4,6 +4,7 @@ import {
   getUserOrgs,
   getUserEvents,
   getRepoReadme,
+  getUserContributions,
 } from "@/lib/github";
 import { UserHeader } from "@/components/user/user-header";
 import { UserStats } from "@/components/user/user-stats";
@@ -13,7 +14,6 @@ import { UserOrgs } from "@/components/user/user-orgs";
 import { UserActivity } from "@/components/user/user-activity";
 import { ProfileReadme } from "@/components/user/profile-readme";
 import { UserInsights } from "@/components/user/user-insights";
-import { UsageHabits } from "@/components/user/usage-habits";
 import { BackButton } from "@/components/back-button";
 import { notFound } from "next/navigation";
 
@@ -25,12 +25,13 @@ interface UserPageProps {
 
 export default async function UserPage({ params }: UserPageProps) {
   const { username } = await params;
-  const [user, repos, orgs, events, readme] = await Promise.all([
+  const [user, repos, orgs, events, readme, contributions] = await Promise.all([
     getUser(username),
     getUserRepos(username),
     getUserOrgs(username),
     getUserEvents(username),
     getRepoReadme(username, username),
+    getUserContributions(username),
   ]);
 
   if (!user) {
@@ -56,8 +57,7 @@ export default async function UserPage({ params }: UserPageProps) {
       <div className="grid gap-8 md:grid-cols-3">
         <LanguagesChart repos={repos} />
         <RepoList repos={repos} />
-        <UserActivity events={events} />
-        <UsageHabits events={events} />
+        <UserActivity events={events} contributions={contributions} />
       </div>
     </div>
   );

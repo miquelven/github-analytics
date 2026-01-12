@@ -15,8 +15,10 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
 
+import { GithubRepo } from "@/types/github";
+
 interface RepoListProps {
-  repos: any[];
+  repos: GithubRepo[];
 }
 
 export function RepoList({ repos }: RepoListProps) {

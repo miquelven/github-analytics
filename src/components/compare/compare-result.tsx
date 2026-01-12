@@ -4,18 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Trophy, Users, Book, Star, ExternalLink } from "lucide-react";
+import { Trophy, Users, Book, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
+import { GithubUser } from "@/types/github";
 
 interface CompareResultProps {
-  user1: any;
-  user2: any;
+  user1: GithubUser;
+  user2: GithubUser;
 }
 
 export function CompareResult({ user1, user2 }: CompareResultProps) {
   const { t } = useLanguage();
-  // Simple score calculation
-  const calculateScore = (user: any) => {
+  
+  const calculateScore = (user: GithubUser) => {
     return user.followers * 2 + user.public_repos + user.public_gists;
   };
 
@@ -24,7 +25,11 @@ export function CompareResult({ user1, user2 }: CompareResultProps) {
   const winner =
     score1 > score2 ? user1.login : score2 > score1 ? user2.login : "Tie";
 
-  const renderUserCard = (user: any, score: number, isWinner: boolean) => (
+  const renderUserCard = (
+    user: GithubUser,
+    score: number,
+    isWinner: boolean
+  ) => (
     <Card
       className={`relative h-full transition-all duration-300 ${
         isWinner

@@ -15,8 +15,10 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { useLanguage } from "@/contexts/language-context";
 
+import { GithubUser } from "@/types/github";
+
 interface UserHeaderProps {
-  user: any;
+  user: GithubUser;
 }
 
 export function UserHeader({ user }: UserHeaderProps) {

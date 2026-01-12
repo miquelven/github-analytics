@@ -9,12 +9,10 @@ export function SplashScreen() {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    // Start exit animation after 2s
     const timer1 = setTimeout(() => {
       setAnimate(true);
     }, 2000);
 
-    // Remove from DOM after animation completes
     const timer2 = setTimeout(() => {
       setShow(false);
     }, 2500);

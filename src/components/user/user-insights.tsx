@@ -14,16 +14,17 @@ import {
 import { differenceInYears, parseISO } from "date-fns";
 import { useLanguage } from "@/contexts/language-context";
 
+import { GithubUser, GithubRepo } from "@/types/github";
+
 interface UserInsightsProps {
-  user: any;
-  repos: any[];
+  user: GithubUser;
+  repos: GithubRepo[];
 }
 
 export function UserInsights({ user, repos }: UserInsightsProps) {
   const { t } = useLanguage();
   const insights = [];
 
-  // Heuristic 1: Veteran (Account Age)
   const accountAge = differenceInYears(new Date(), parseISO(user.created_at));
   if (accountAge >= 5) {
     insights.push({
@@ -44,7 +45,6 @@ export function UserInsights({ user, repos }: UserInsightsProps) {
     });
   }
 
-  // Heuristic 2: Popularity (Followers)
   if (user.followers > 1000) {
     insights.push({
       icon: <Users className="h-4 w-4" />,
@@ -61,7 +61,6 @@ export function UserInsights({ user, repos }: UserInsightsProps) {
     });
   }
 
-  // Heuristic 3: Total Stars (Star Hunter)
   const totalStars = repos.reduce(
     (acc, repo) => acc + repo.stargazers_count,
     0
@@ -78,7 +77,6 @@ export function UserInsights({ user, repos }: UserInsightsProps) {
     });
   }
 
-  // Heuristic 4: Polyglot (Languages)
   const languages = new Set(repos.map((r) => r.language).filter(Boolean));
   if (languages.size > 5) {
     insights.push({
@@ -92,7 +90,6 @@ export function UserInsights({ user, repos }: UserInsightsProps) {
     });
   }
 
-  // Heuristic 5: Prolific (Public Repos)
   if (user.public_repos > 50) {
     insights.push({
       icon: <Calendar className="h-4 w-4" />,
@@ -105,14 +102,12 @@ export function UserInsights({ user, repos }: UserInsightsProps) {
     });
   }
 
-  // Heuristic 6: Top Language Specialist
   const langCounts: Record<string, number> = {};
   repos.forEach((r) => {
     if (r.language) langCounts[r.language] = (langCounts[r.language] || 0) + 1;
   });
   const topLang = Object.entries(langCounts).sort((a, b) => b[1] - a[1])[0];
   if (topLang && topLang[1] > 5) {
-    // At least 5 repos in that language
     insights.push({
       icon: <Code className="h-4 w-4" />,
       label: t.user.insights.specialist.replace("{lang}", topLang[0]),

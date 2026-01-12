@@ -4,9 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, Star, GitFork, Eye } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 
+import { GithubUser, GithubRepo } from "@/types/github";
+
 interface UserStatsProps {
-  user: any;
-  repos: any[];
+  user: GithubUser;
+  repos: GithubRepo[];
 }
 
 export function UserStats({ user, repos }: UserStatsProps) {
@@ -16,9 +18,6 @@ export function UserStats({ user, repos }: UserStatsProps) {
     0
   );
   const totalForks = repos.reduce((acc, repo) => acc + repo.forks_count, 0);
-
-  // Note: Watchers count in list endpoint is same as stars usually, but subscribers_count is only available in detail
-  // We'll just use what we have.
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">

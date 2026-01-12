@@ -5,8 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
 
+import { GithubOrg } from "@/types/github";
+
 interface UserOrgsProps {
-  orgs: any[];
+  orgs: GithubOrg[];
 }
 
 export function UserOrgs({ orgs }: UserOrgsProps) {

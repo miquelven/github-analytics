@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
+import { GithubContributor } from "@/types/github";
 
 interface RepoContributorsProps {
-  contributors: any[];
+  contributors: GithubContributor[];
 }
 
 export function RepoContributors({ contributors }: RepoContributorsProps) {

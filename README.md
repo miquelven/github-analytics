@@ -19,7 +19,6 @@ O projeto utiliza a **GitHub API** para buscar dados em tempo real e apresenta a
 
   - Visão geral do perfil com estatísticas principais.
   - **Heatmap de Contribuições** interativo.
-  - **Insights de Hábitos**: Descubra se o usuário é um "Early Bird" ou "Night Owl".
   - Gráficos de distribuição de linguagens.
   - Lista de repositórios e organizações.
 

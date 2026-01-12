@@ -17,8 +17,10 @@ import {
 } from "recharts";
 import { useLanguage } from "@/contexts/language-context";
 
+import { GithubRepo } from "@/types/github";
+
 interface LanguagesChartProps {
-  repos: any[];
+  repos: GithubRepo[];
 }
 
 export function LanguagesChart({ repos }: LanguagesChartProps) {
@@ -33,7 +35,7 @@ export function LanguagesChart({ repos }: LanguagesChartProps) {
   const data = Object.entries(languagesMap)
     .map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value)
-    .slice(0, 5); // Top 5 languages
+    .slice(0, 5);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 

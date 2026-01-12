@@ -15,12 +15,10 @@ export function RepoSearchForm() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      // Expecting format "owner/repo"
       const parts = query.trim().split("/");
       if (parts.length === 2) {
         router.push(`/repo/${parts[0]}/${parts[1]}`);
       } else {
-        // Maybe show an error or toast? For MVP just ignore or basic alert
         alert(t.common.invalidRepoFormat);
       }
     }
