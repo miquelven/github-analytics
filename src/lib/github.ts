@@ -1,4 +1,16 @@
 import { Octokit } from "@octokit/rest";
+import {
+  GithubUser,
+  GithubRepo,
+  GithubEvent,
+  GithubOrg,
+  ContributionCalendar,
+  GithubRateLimit,
+  GithubContributor,
+  GithubStargazer,
+  GithubSearchRepoResult,
+  GithubSearchUserResult,
+} from "@/types/github";
 
 export const github = new Octokit({
   auth: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
@@ -10,41 +22,47 @@ export const github = new Octokit({
   },
 });
 
-export const getUser = async (username: string) => {
+export const getUser = async (username: string): Promise<GithubUser | null> => {
   try {
     const { data } = await github.users.getByUsername({ username });
-    return data;
+    return data as GithubUser;
   } catch (error) {
     console.error("Error fetching user:", error);
     return null;
   }
 };
 
-export const getUserRepos = async (username: string) => {
+export const getUserRepos = async (username: string): Promise<GithubRepo[]> => {
   try {
     const { data } = await github.repos.listForUser({
       username,
       sort: "updated",
       per_page: 100,
     });
-    return data;
+    return data as unknown as GithubRepo[];
   } catch (error) {
     console.error("Error fetching repos:", error);
     return [];
   }
 };
 
-export const getRepoDetails = async (owner: string, repo: string) => {
+export const getRepoDetails = async (
+  owner: string,
+  repo: string
+): Promise<GithubRepo | null> => {
   try {
     const { data } = await github.repos.get({ owner, repo });
-    return data;
+    return data as unknown as GithubRepo;
   } catch (error) {
     console.error("Error fetching repo details:", error);
     return null;
   }
 };
 
-export const getRepoLanguages = async (owner: string, repo: string) => {
+export const getRepoLanguages = async (
+  owner: string,
+  repo: string
+): Promise<Record<string, number>> => {
   try {
     const { data } = await github.repos.listLanguages({ owner, repo });
     return data;
@@ -54,44 +72,52 @@ export const getRepoLanguages = async (owner: string, repo: string) => {
   }
 };
 
-export const getUserEvents = async (username: string) => {
+export const getUserEvents = async (
+  username: string
+): Promise<GithubEvent[]> => {
   try {
     const { data } = await github.activity.listPublicEventsForUser({
       username,
       per_page: 30,
     });
-    return data;
+    return data as unknown as GithubEvent[];
   } catch (error) {
     console.error("Error fetching user events:", error);
     return [];
   }
 };
 
-export const getUserOrgs = async (username: string) => {
+export const getUserOrgs = async (username: string): Promise<GithubOrg[]> => {
   try {
     const { data } = await github.orgs.listForUser({ username });
-    return data;
+    return data as GithubOrg[];
   } catch (error) {
     console.error("Error fetching user orgs:", error);
     return [];
   }
 };
 
-export const getRepoContributors = async (owner: string, repo: string) => {
+export const getRepoContributors = async (
+  owner: string,
+  repo: string
+): Promise<GithubContributor[]> => {
   try {
     const { data } = await github.repos.listContributors({
       owner,
       repo,
       per_page: 10,
     });
-    return data;
+    return data as unknown as GithubContributor[];
   } catch (error) {
     console.error("Error fetching contributors:", error);
     return [];
   }
 };
 
-export const getRepoReadme = async (owner: string, repo: string) => {
+export const getRepoReadme = async (
+  owner: string,
+  repo: string
+): Promise<string | null> => {
   try {
     const { data } = await github.repos.getReadme({
       owner,
@@ -100,25 +126,71 @@ export const getRepoReadme = async (owner: string, repo: string) => {
         format: "raw",
       },
     });
-    // @ts-expect-error - Octokit types might be slightly off for raw media type return
-    return data as string;
+    return data as unknown as string;
   } catch (error) {
     console.error("Error fetching readme:", error);
     return null;
   }
 };
 
-export const getRepoStargazers = async (owner: string, repo: string) => {
+export const getUserContributions = async (
+  username: string
+): Promise<ContributionCalendar | null> => {
+  try {
+    const query = `
+      query($username: String!) {
+        user(login: $username) {
+          contributionsCollection {
+            contributionCalendar {
+              totalContributions
+              weeks {
+                contributionDays {
+                  contributionCount
+                  date
+                  color
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const response = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: { username },
+      }),
+      next: { revalidate: 3600 },
+    });
+
+    const data = await response.json();
+    return data.data?.user?.contributionsCollection?.contributionCalendar;
+  } catch (error) {
+    console.error("Error fetching contributions:", error);
+    return null;
+  }
+};
+
+export const getRepoStargazers = async (
+  owner: string,
+  repo: string
+): Promise<GithubStargazer[]> => {
   try {
     const { data } = await github.activity.listStargazersForRepo({
       owner,
       repo,
       per_page: 10,
       headers: {
-        accept: "application/vnd.github.v3.star+json", // To get starred_at timestamp
+        accept: "application/vnd.github.v3.star+json",
       },
     });
-    return data;
+    return data as unknown as GithubStargazer[];
   } catch (error) {
     console.error("Error fetching stargazers:", error);
     return [];
@@ -129,7 +201,7 @@ export const searchRepos = async (
   q: string,
   sort: "stars" | "forks" | "updated" = "stars",
   order: "desc" | "asc" = "desc"
-) => {
+): Promise<GithubSearchRepoResult | null> => {
   try {
     const { data } = await github.search.repos({
       q,
@@ -137,7 +209,7 @@ export const searchRepos = async (
       order,
       per_page: 10,
     });
-    return data;
+    return data as unknown as GithubSearchRepoResult;
   } catch (error) {
     console.error("Error searching repos:", error);
     return null;
@@ -148,7 +220,7 @@ export const searchUsers = async (
   q: string,
   sort: "followers" | "repositories" | "joined" = "followers",
   order: "desc" | "asc" = "desc"
-) => {
+): Promise<GithubSearchUserResult | null> => {
   try {
     const { data } = await github.search.users({
       q,
@@ -156,19 +228,9 @@ export const searchUsers = async (
       order,
       per_page: 10,
     });
-    return data;
+    return data as unknown as GithubSearchUserResult;
   } catch (error) {
     console.error("Error searching users:", error);
-    return null;
-  }
-};
-
-export const getRateLimit = async () => {
-  try {
-    const { data } = await github.rateLimit.get();
-    return data.rate;
-  } catch (error) {
-    console.error("Error fetching rate limit:", error);
     return null;
   }
 };

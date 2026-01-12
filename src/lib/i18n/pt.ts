@@ -138,23 +138,6 @@ export const pt = {
       },
       contributionGraph: "Gráfico de Contribuições",
     },
-    habits: {
-      title: "Hábitos de Código",
-      description: "Baseado no horário dos commits",
-      timeOfDay: "Hora do Dia",
-      commits: "Commits",
-      personas: {
-        title: "Você é um(a)",
-        earlyBird: "Madrugador(a) 🌅",
-        earlyBirdDesc: "Mais ativo pela manhã",
-        afternoon: "Programador(a) da Tarde ☕",
-        afternoonDesc: "Mais ativo à tarde",
-        nightOwl: "Coruja Noturna 🦉",
-        nightOwlDesc: "Mais ativo à noite",
-        insomniac: "Insone 🧟",
-        insomniacDesc: "Mais ativo de madrugada",
-      },
-    },
   },
   repo: {
     stars: "Estrelas",

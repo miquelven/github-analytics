@@ -14,26 +14,14 @@ import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useTheme } from "next-themes";
-
-interface GithubEvent {
-  id: string;
-  type: string | null;
-  created_at: string | null;
-  repo: {
-    name: string;
-  };
-  payload: {
-    ref?: string;
-    ref_type?: string;
-    action?: string;
-  };
-}
+import { GithubEvent, ContributionCalendar } from "@/types/github";
 
 interface UserActivityProps {
   events: GithubEvent[];
+  contributions?: ContributionCalendar | null;
 }
 
-export function UserActivity({ events }: UserActivityProps) {
+export function UserActivity({ events, contributions }: UserActivityProps) {
   const { t } = useLanguage();
   const { theme } = useTheme();
 
@@ -41,48 +29,31 @@ export function UserActivity({ events }: UserActivityProps) {
     return null;
   }
 
-  // Generate mock heatmap data for demonstration (since github API doesn't provide contribution calendar in rest v3 easily)
-  // In a real production app, you'd scrape this or use GraphQL API
-  // For MVP, we will visualize the RECENT events we have as heatmap points
-  const generateHeatmapData = () => {
-    const today = new Date();
-    const data = [];
-    const eventsMap: Record<string, number> = {};
+  const transformContributionData = () => {
+    if (!contributions) return [];
 
-    events.forEach((e) => {
-      if (!e.created_at) return;
-      const date = e.created_at.split("T")[0];
-      eventsMap[date] = (eventsMap[date] || 0) + 1;
+    const data: { date: string; count: number; level: number }[] = [];
+
+    contributions.weeks.forEach((week) => {
+      week.contributionDays.forEach((day) => {
+        let level = 0;
+        if (day.contributionCount > 0) level = 1;
+        if (day.contributionCount >= 3) level = 2;
+        if (day.contributionCount >= 6) level = 3;
+        if (day.contributionCount >= 10) level = 4;
+
+        data.push({
+          date: day.date,
+          count: day.contributionCount,
+          level,
+        });
+      });
     });
 
-    // Fill last 6 months roughly
-    for (let i = 180; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split("T")[0];
-      data.push({
-        date: dateStr,
-        count: eventsMap[dateStr] || Math.floor(Math.random() * 4), // Adding some mock randomness for "alive" look in MVP
-        level: 0,
-      });
-    }
-
-    return data.map((d) => ({
-      ...d,
-      level:
-        d.count === 0
-          ? 0
-          : d.count < 3
-          ? 1
-          : d.count < 6
-          ? 2
-          : d.count < 10
-          ? 3
-          : 4,
-    }));
+    return data;
   };
 
-  const heatmapData = generateHeatmapData();
+  const heatmapData = transformContributionData();
 
   const getEventIcon = (type: string | null) => {
     switch (type) {
@@ -169,7 +140,7 @@ export function UserActivity({ events }: UserActivityProps) {
       </CardHeader>
       <CardContent className="space-y-8">
         <div className="flex flex-col items-center justify-center p-4 border rounded-lg bg-card/50">
-          <div className="w-full overflow-x-auto flex justify-center">
+          <div className="flex justify-end mt-2">
             <ActivityCalendar
               data={heatmapData}
               theme={{
@@ -177,13 +148,14 @@ export function UserActivity({ events }: UserActivityProps) {
                 dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
               }}
               colorScheme={theme === "dark" ? "dark" : "light"}
-              blockSize={12}
-              blockMargin={4}
+              blockRadius={2}
+              blockSize={10}
+              blockMargin={3}
               fontSize={12}
               showWeekdayLabels
               labels={{
-                months: t.user.activity.calendar.months as any,
-                weekdays: t.user.activity.calendar.weekdays as any,
+                months: t.user.activity.calendar.months,
+                weekdays: t.user.activity.calendar.weekdays,
                 totalCount: t.user.activity.calendar.totalCount,
                 legend: t.user.activity.calendar.legend,
               }}
