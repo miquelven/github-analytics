@@ -5,7 +5,6 @@ import {
   GithubEvent,
   GithubOrg,
   ContributionCalendar,
-  GithubRateLimit,
   GithubContributor,
   GithubStargazer,
   GithubSearchRepoResult,

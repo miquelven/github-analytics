@@ -15,7 +15,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
   let user1Data = null;
   let user2Data = null;
-  let notFoundUsers: string[] = [];
+  const notFoundUsers: string[] = [];
 
   if (user1Name && user2Name) {
     const [u1, u2] = await Promise.all([
