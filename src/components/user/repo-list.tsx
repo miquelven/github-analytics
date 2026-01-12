@@ -49,15 +49,15 @@ export function RepoList({ repos }: RepoListProps) {
               key={repo.id}
               className="flex flex-col space-y-2 rounded-lg border p-4 hover:bg-muted/50 transition-colors"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <Link
                   href={repo.html_url}
                   target="_blank"
-                  className="font-semibold hover:underline text-primary"
+                  className="font-semibold hover:underline text-primary truncate min-w-0"
                 >
                   {repo.name}
                 </Link>
-                <Badge variant={repo.private ? "secondary" : "outline"}>
+                <Badge variant={repo.private ? "secondary" : "outline"} className="shrink-0">
                   {repo.private ? t.user.repos.private : t.user.repos.public}
                 </Badge>
               </div>

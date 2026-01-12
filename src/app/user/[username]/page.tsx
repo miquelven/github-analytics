@@ -54,7 +54,7 @@ export default async function UserPage({ params }: UserPageProps) {
 
       <UserStats user={user} repos={repos} />
 
-      <div className="grid gap-8 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <LanguagesChart repos={repos} />
         <RepoList repos={repos} />
         <UserActivity events={events} contributions={contributions} />
