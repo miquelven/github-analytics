@@ -139,35 +139,49 @@ export function UserActivity({ events, contributions }: UserActivityProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="flex flex-col items-center justify-center p-4 border rounded-lg bg-card/50 w-full">
-          <div className="w-full overflow-x-auto pb-2">
-            <div className="min-w-[600px] flex justify-center">
-              <ActivityCalendar
-                data={heatmapData}
-                theme={{
-                  light: ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
-                  dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
-                }}
-                colorScheme={theme === "dark" ? "dark" : "light"}
-                blockRadius={2}
-                blockSize={10}
-                blockMargin={3}
-                fontSize={12}
-                showWeekdayLabels
-                labels={{
-                  months: t.user.activity.calendar.months,
-                  weekdays: t.user.activity.calendar.weekdays,
-                  totalCount: t.user.activity.calendar.totalCount,
-                  legend: t.user.activity.calendar.legend,
-                }}
-              />
+        {heatmapData.length > 0 && (
+          <div className="flex flex-col items-center justify-center p-4 border rounded-lg bg-card/50 w-full">
+            <div className="w-full overflow-x-auto pb-2">
+              <div className="min-w-[600px] flex justify-center">
+                <ActivityCalendar
+                  data={heatmapData}
+                  theme={{
+                    light: [
+                      "#ebedf0",
+                      "#9be9a8",
+                      "#40c463",
+                      "#30a14e",
+                      "#216e39",
+                    ],
+                    dark: [
+                      "#161b22",
+                      "#0e4429",
+                      "#006d32",
+                      "#26a641",
+                      "#39d353",
+                    ],
+                  }}
+                  colorScheme={theme === "dark" ? "dark" : "light"}
+                  blockRadius={2}
+                  blockSize={10}
+                  blockMargin={3}
+                  fontSize={12}
+                  showWeekdayLabels
+                  labels={{
+                    months: t.user.activity.calendar.months,
+                    weekdays: t.user.activity.calendar.weekdays,
+                    totalCount: t.user.activity.calendar.totalCount,
+                    legend: t.user.activity.calendar.legend,
+                  }}
+                />
+              </div>
             </div>
+            <p className="text-xs text-muted-foreground mt-4 flex items-center gap-1">
+              <CalendarDays className="h-3 w-3" />
+              {t.user.activity.contributionGraph}
+            </p>
           </div>
-          <p className="text-xs text-muted-foreground mt-4 flex items-center gap-1">
-            <CalendarDays className="h-3 w-3" />
-            {t.user.activity.contributionGraph}
-          </p>
-        </div>
+        )}
 
         <div className="space-y-4">
           {events.slice(0, 10).map((event) => (
