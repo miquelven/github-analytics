@@ -24,9 +24,6 @@ export function CompareView({
   return (
     <div className="container mx-auto py-12 px-4">
       <div className="flex flex-col items-center mb-8">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-          {t.compare.title}
-        </h1>
         <CompareForm />
       </div>
 
