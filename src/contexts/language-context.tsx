@@ -13,18 +13,21 @@ interface LanguageContextType {
   t: Dictionary;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
 
   useEffect(() => {
     const savedLang = localStorage.getItem("github-analytics-lang") as Language;
-    if (savedLang && (savedLang === "en" || savedLang === "pt")) {
-      setLanguageState(savedLang);
-    } else {
-        const browserLang = navigator.language.startsWith('pt') ? 'pt' : 'en';
-        setLanguageState(browserLang);
+    const browserLang = navigator.language.startsWith("pt") ? "pt" : "en";
+    const targetLang =
+      savedLang === "en" || savedLang === "pt" ? savedLang : browserLang;
+
+    if (targetLang !== "en") {
+      setLanguageState(targetLang);
     }
   }, []);
 
