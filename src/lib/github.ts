@@ -17,7 +17,7 @@ export const github = new Octokit({
     debug: () => {},
     info: () => {},
     warn: console.warn,
-    error: console.error,
+    error: () => {},
   },
 });
 
@@ -126,8 +126,13 @@ export const getRepoReadme = async (
       },
     });
     return data as unknown as string;
-  } catch (error: any) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "status" in error &&
+      error.status === 404
+    ) {
       return null;
     }
     console.error("Error fetching readme:", error);
