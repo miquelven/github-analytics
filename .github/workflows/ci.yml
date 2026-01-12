@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run Lint
+      run: npm run lint
+
+    - name: Type Check
+      run: npx tsc --noEmit
+
+    - name: Build
+      run: npm run build
+      env:
+        # Adicione variáveis de ambiente fictícias se necessário para o build passar
+        # O token real não deve ser exposto aqui, mas se o build depender dele apenas para existir, um valor dummy serve.
+        NEXT_PUBLIC_GITHUB_TOKEN: ${{ secrets.NEXT_PUBLIC_GITHUB_TOKEN || 'dummy_token_for_build' }}
