@@ -126,7 +126,10 @@ export const getRepoReadme = async (
       },
     });
     return data as unknown as string;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.status === 404) {
+      return null;
+    }
     console.error("Error fetching readme:", error);
     return null;
   }
