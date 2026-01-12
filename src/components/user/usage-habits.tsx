@@ -20,8 +20,8 @@ import {
 import { Clock, Sunrise, Sun, Sunset, Moon } from "lucide-react";
 
 interface GithubEvent {
-  created_at: string;
-  type: string;
+  created_at: string | null;
+  type: string | null;
 }
 
 interface UsageHabitsProps {
@@ -38,6 +38,7 @@ export function UsageHabits({ events }: UsageHabitsProps) {
   // Process events to get hour distribution
   const hours = Array(24).fill(0);
   events.forEach((event) => {
+    if (!event.created_at) return;
     const date = new Date(event.created_at);
     const hour = date.getHours();
     hours[hour]++;
@@ -58,6 +59,7 @@ export function UsageHabits({ events }: UsageHabitsProps) {
   };
 
   events.forEach((event) => {
+    if (!event.created_at) return;
     const hour = new Date(event.created_at).getHours();
     if (hour >= 0 && hour < 6) periods.insomniac++;
     else if (hour >= 6 && hour < 12) periods.earlyBird++;

@@ -17,8 +17,8 @@ import { useTheme } from "next-themes";
 
 interface GithubEvent {
   id: string;
-  type: string;
-  created_at: string;
+  type: string | null;
+  created_at: string | null;
   repo: {
     name: string;
   };
@@ -50,6 +50,7 @@ export function UserActivity({ events }: UserActivityProps) {
     const eventsMap: Record<string, number> = {};
 
     events.forEach((e) => {
+      if (!e.created_at) return;
       const date = e.created_at.split("T")[0];
       eventsMap[date] = (eventsMap[date] || 0) + 1;
     });
@@ -83,7 +84,7 @@ export function UserActivity({ events }: UserActivityProps) {
 
   const heatmapData = generateHeatmapData();
 
-  const getEventIcon = (type: string) => {
+  const getEventIcon = (type: string | null) => {
     switch (type) {
       case "PushEvent":
         return <GitCommit className="h-4 w-4 text-blue-500" />;
@@ -206,7 +207,8 @@ export function UserActivity({ events }: UserActivityProps) {
                   {getEventDescription(event)}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {format(new Date(event.created_at), "PPP p")}
+                  {event.created_at &&
+                    format(new Date(event.created_at), "PPP p")}
                 </p>
               </div>
             </div>
