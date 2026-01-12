@@ -7,8 +7,6 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/contexts/language-context";
 
-import { RateLimitIndicator } from "@/components/rate-limit-indicator";
-
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const { t } = useLanguage();
 
@@ -39,12 +37,6 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       <main className="flex-1">{children}</main>
-      <RateLimitIndicator />
-      <footer className="border-t py-6">
-        <div className="container mx-auto text-center text-sm text-muted-foreground">
-          {t.common.builtWith}
-        </div>
-      </footer>
     </>
   );
 }
