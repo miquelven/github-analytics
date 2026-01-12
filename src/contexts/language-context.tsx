@@ -27,7 +27,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       savedLang === "en" || savedLang === "pt" ? savedLang : browserLang;
 
     if (targetLang !== "en") {
-      setLanguageState(targetLang);
+      // Use setTimeout to avoid synchronous state update warning during mount
+      // This is necessary to sync with localStorage/browser preference without hydration mismatch
+      setTimeout(() => setLanguageState(targetLang), 0);
     }
   }, []);
 
