@@ -13,11 +13,6 @@ export function BackButton() {
   const getFallbackPath = () => {
     const parts = pathname.split("/").filter(Boolean);
 
-    // Se estiver na tela de repo: /repo/[owner]/[repo] -> voltar para /user/[owner]
-    if (parts[0] === "repo" && parts.length >= 2) {
-      return `/user/${parts[1]}`;
-    }
-
     // Se estiver na tela de usuário: /user/[owner] -> voltar para /
     if (parts[0] === "user") {
       return "/";
