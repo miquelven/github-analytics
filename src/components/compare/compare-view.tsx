@@ -6,17 +6,38 @@ import { CompareResult } from "@/components/compare/compare-result";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
-import { GithubUser } from "@/types/github";
+import { GithubUser, GithubRepo, ContributionCalendar } from "@/types/github";
+import {
+  LanguageStat,
+  CommitConsistency,
+  DeveloperProfile,
+  Insight,
+} from "@/lib/analytics";
+
+export interface UserAnalytics {
+  languages: LanguageStat[];
+  consistency: CommitConsistency;
+  profile: DeveloperProfile;
+  insights: Insight[];
+}
 
 interface CompareViewProps {
   user1Data: GithubUser | null;
   user2Data: GithubUser | null;
+  user1Repos: GithubRepo[];
+  user2Repos: GithubRepo[];
+  user1Contributions: ContributionCalendar | null;
+  user2Contributions: ContributionCalendar | null;
+  user1Analytics?: UserAnalytics;
+  user2Analytics?: UserAnalytics;
   notFoundUsers?: string[];
 }
 
 export function CompareView({
   user1Data,
   user2Data,
+  user1Analytics,
+  user2Analytics,
   notFoundUsers,
 }: CompareViewProps) {
   const { t } = useLanguage();
@@ -41,7 +62,12 @@ export function CompareView({
         <Suspense
           fallback={<div className="text-center mt-8">{t.compare.loading}</div>}
         >
-          <CompareResult user1={user1Data} user2={user2Data} />
+          <CompareResult
+            user1={user1Data}
+            user2={user2Data}
+            user1Analytics={user1Analytics}
+            user2Analytics={user2Analytics}
+          />
         </Suspense>
       )}
     </div>

@@ -5,17 +5,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Lightbulb,
   Star,
-  Calendar,
-  Code,
   Users,
   Award,
-  Clock,
   Gauge,
   Eye,
   EyeOff,
+  TrendingUp,
+  Zap,
+  GitCommit,
 } from "lucide-react";
-import { differenceInYears, parseISO } from "date-fns";
 import { useLanguage } from "@/contexts/language-context";
+import { calculateConsistency, generateInsights } from "@/lib/analytics";
 
 import {
   GithubUser,
@@ -38,7 +38,6 @@ export function UserInsights({
   contributions,
 }: UserInsightsProps) {
   const { t } = useLanguage();
-  const insights = [];
   const [showDevScore, setShowDevScore] = useState(false);
 
   const totalStarsFromRepos = repos.reduce(
@@ -95,91 +94,66 @@ export function UserInsights({
       publicProjectsScore
   );
 
-  const accountAge = differenceInYears(new Date(), parseISO(user.created_at));
-  if (accountAge >= 5) {
-    insights.push({
-      icon: <Clock className="h-4 w-4" />,
-      label: t.user.insights.veteran,
-      description: t.user.insights.veteranDesc.replace(
-        "{years}",
-        accountAge.toString()
-      ),
-      color: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-    });
-  } else if (accountAge < 1) {
-    insights.push({
-      icon: <Award className="h-4 w-4" />,
-      label: t.user.insights.newcomer,
-      description: t.user.insights.newcomerDesc,
-      color: "bg-green-500/10 text-green-500 border-green-500/20",
-    });
-  }
+  const consistency = calculateConsistency(contributions);
+  const automaticInsights = generateInsights(user, repos, consistency);
 
-  if (user.followers > 1000) {
-    insights.push({
-      icon: <Users className="h-4 w-4" />,
-      label: t.user.insights.influencer,
-      description: t.user.insights.influencerDesc,
-      color: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-    });
-  } else if (user.followers > 100) {
-    insights.push({
-      icon: <Users className="h-4 w-4" />,
-      label: t.user.insights.risingStar,
-      description: t.user.insights.risingStarDesc,
-      color: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    });
-  }
+  const insights = automaticInsights.map((insight) => {
+    let icon;
+    switch (insight.icon) {
+      case "TrendingUp":
+        icon = <TrendingUp className="h-4 w-4" />;
+        break;
+      case "Star":
+        icon = <Star className="h-4 w-4" />;
+        break;
+      case "Zap":
+        icon = <Zap className="h-4 w-4" />;
+        break;
+      case "Award":
+        icon = <Award className="h-4 w-4" />;
+        break;
+      case "Users":
+        icon = <Users className="h-4 w-4" />;
+        break;
+      case "GitCommit":
+        icon = <GitCommit className="h-4 w-4" />;
+        break;
+      default:
+        icon = <Star className="h-4 w-4" />;
+        break;
+    }
 
-  if (totalStarsFromRepos > 500) {
-    insights.push({
-      icon: <Star className="h-4 w-4" />,
-      label: t.user.insights.starHunter,
-      description: t.user.insights.starHunterDesc.replace(
-        "{stars}",
-        totalStarsFromRepos.toString()
-      ),
-      color: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-    });
-  }
+    let color = "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    if (insight.type === "positive")
+      color = "bg-green-500/10 text-green-500 border-green-500/20";
+    if (insight.type === "trend")
+      color = "bg-blue-500/10 text-blue-500 border-blue-500/20";
+    if (insight.titleKey === "veteran")
+      color = "bg-amber-500/10 text-amber-500 border-amber-500/20";
 
-  if (languages.size > 5) {
-    insights.push({
-      icon: <Code className="h-4 w-4" />,
-      label: t.user.insights.polyglot,
-      description: t.user.insights.polyglotDesc.replace(
-        "{count}",
-        languages.size.toString()
-      ),
-      color: "bg-pink-500/10 text-pink-500 border-pink-500/20",
-    });
-  }
+    const rawText =
+      t.compare.result.insights[
+        insight.titleKey as keyof typeof t.compare.result.insights
+      ] || "";
 
-  if (user.public_repos > 50) {
-    insights.push({
-      icon: <Calendar className="h-4 w-4" />,
-      label: t.user.insights.prolific,
-      description: t.user.insights.prolificDesc.replace(
-        "{count}",
-        user.public_repos.toString()
-      ),
-      color: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
-    });
-  }
+    const parts = rawText.split(": ");
+    let label = parts.length > 1 ? parts[0] : rawText;
+    let description = parts.length > 1 ? parts.slice(1).join(": ") : "";
 
-  const langCounts: Record<string, number> = {};
-  repos.forEach((r) => {
-    if (r.language) langCounts[r.language] = (langCounts[r.language] || 0) + 1;
+    if (insight.params) {
+      Object.entries(insight.params).forEach(([key, value]) => {
+        description = description.replace(`{${key}}`, value.toString());
+        label = label.replace(`{${key}}`, value.toString());
+      });
+    }
+
+    return {
+      icon,
+      label,
+      description,
+      color,
+    };
   });
-  const topLang = Object.entries(langCounts).sort((a, b) => b[1] - a[1])[0];
-  if (topLang && topLang[1] > 5) {
-    insights.push({
-      icon: <Code className="h-4 w-4" />,
-      label: t.user.insights.specialist.replace("{lang}", topLang[0]),
-      description: t.user.insights.specialistDesc.replace("{lang}", topLang[0]),
-      color: "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
-    });
-  }
 
   if (insights.length === 0) return null;
 
