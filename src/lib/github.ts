@@ -1,4 +1,5 @@
 import { Octokit } from "@octokit/rest";
+import { logError } from "@/lib/observability/logger";
 import {
   GithubUser,
   GithubRepo,
@@ -26,7 +27,7 @@ export const getUser = async (username: string): Promise<GithubUser | null> => {
     const { data } = await github.users.getByUsername({ username });
     return data as GithubUser;
   } catch (error) {
-    console.error("Error fetching user:", error);
+    logError("Error fetching user", { username, error });
     return null;
   }
 };
@@ -40,7 +41,7 @@ export const getUserRepos = async (username: string): Promise<GithubRepo[]> => {
     });
     return data as unknown as GithubRepo[];
   } catch (error) {
-    console.error("Error fetching repos:", error);
+    logError("Error fetching repos", { username, error });
     return [];
   }
 };
@@ -53,7 +54,7 @@ export const getRepoDetails = async (
     const { data } = await github.repos.get({ owner, repo });
     return data as unknown as GithubRepo;
   } catch (error) {
-    console.error("Error fetching repo details:", error);
+    logError("Error fetching repo details", { owner, repo, error });
     return null;
   }
 };
@@ -66,7 +67,7 @@ export const getRepoLanguages = async (
     const { data } = await github.repos.listLanguages({ owner, repo });
     return data;
   } catch (error) {
-    console.error("Error fetching repo languages:", error);
+    logError("Error fetching repo languages", { owner, repo, error });
     return {};
   }
 };
@@ -81,7 +82,7 @@ export const getUserEvents = async (
     });
     return data as unknown as GithubEvent[];
   } catch (error) {
-    console.error("Error fetching user events:", error);
+    logError("Error fetching user events", { username, error });
     return [];
   }
 };
@@ -91,7 +92,7 @@ export const getUserOrgs = async (username: string): Promise<GithubOrg[]> => {
     const { data } = await github.orgs.listForUser({ username });
     return data as GithubOrg[];
   } catch (error) {
-    console.error("Error fetching user orgs:", error);
+    logError("Error fetching user orgs", { username, error });
     return [];
   }
 };
@@ -108,7 +109,7 @@ export const getRepoContributors = async (
     });
     return data as unknown as GithubContributor[];
   } catch (error) {
-    console.error("Error fetching contributors:", error);
+    logError("Error fetching contributors", { owner, repo, error });
     return [];
   }
 };
@@ -131,11 +132,12 @@ export const getRepoReadme = async (
       typeof error === "object" &&
       error !== null &&
       "status" in error &&
-      error.status === 404
+      (error as { status?: number }).status === 404
     ) {
+      logError("Readme not found", { owner, repo });
       return null;
     }
-    console.error("Error fetching readme:", error);
+    logError("Error fetching readme", { owner, repo, error });
     return null;
   }
 };
@@ -179,7 +181,7 @@ export const getUserContributions = async (
     const data = await response.json();
     return data.data?.user?.contributionsCollection?.contributionCalendar;
   } catch (error) {
-    console.error("Error fetching contributions:", error);
+    logError("Error fetching contributions", { username, error });
     return null;
   }
 };
@@ -199,7 +201,7 @@ export const getRepoStargazers = async (
     });
     return data as unknown as GithubStargazer[];
   } catch (error) {
-    console.error("Error fetching stargazers:", error);
+    logError("Error fetching stargazers", { owner, repo, error });
     return [];
   }
 };
@@ -239,7 +241,7 @@ export const getRepoStarsTimeline = async (
       return { date, value: cumulative };
     });
   } catch (error) {
-    console.error("Error fetching stars timeline:", error);
+    logError("Error fetching stars timeline", { owner, repo, error });
     return [];
   }
 };
@@ -274,7 +276,7 @@ export const getRepoForksTimeline = async (
       return { date, value: cumulative };
     });
   } catch (error) {
-    console.error("Error fetching forks timeline:", error);
+    logError("Error fetching forks timeline", { owner, repo, error });
     return [];
   }
 };
@@ -294,7 +296,7 @@ export const getRepoIssuesSummary = async (
     const closed = data.filter((issue) => issue.state === "closed").length;
     return { open, closed };
   } catch (error) {
-    console.error("Error fetching repo issues summary:", error);
+    logError("Error fetching repo issues summary", { owner, repo, error });
     return { open: 0, closed: 0 };
   }
 };
@@ -311,7 +313,7 @@ export const getRepoEvents = async (
     });
     return data as unknown as GithubEvent[];
   } catch (error) {
-    console.error("Error fetching repo events:", error);
+    logError("Error fetching repo events", { owner, repo, error });
     return [];
   }
 };
@@ -327,7 +329,7 @@ export const getRepoFileCount = async (
     });
     return data.total_count;
   } catch (error) {
-    console.error("Error fetching repo file count:", error);
+    logError("Error fetching repo file count", { owner, repo, error });
     return null;
   }
 };
@@ -346,7 +348,7 @@ export const searchRepos = async (
     });
     return data as unknown as GithubSearchRepoResult;
   } catch (error) {
-    console.error("Error searching repos:", error);
+    logError("Error searching repos", { q, sort, order, error });
     return null;
   }
 };
@@ -365,7 +367,7 @@ export const searchUsers = async (
     });
     return data as unknown as GithubSearchUserResult;
   } catch (error) {
-    console.error("Error searching users:", error);
+    logError("Error searching users", { q, sort, order, error });
     return null;
   }
 };

@@ -23,6 +23,7 @@ import {
 import { LayoutDashboard, Briefcase, FolderGit2, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { exportToPDF } from "@/lib/export";
+import { ErrorBoundary } from "@/components/observability/error-boundary";
 
 interface UserProfileContentProps {
   user: GithubUser;
@@ -45,7 +46,8 @@ export function UserProfileContent({
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <Tabs defaultValue="overview" className="space-y-6">
+      <ErrorBoundary>
+        <Tabs defaultValue="overview" className="space-y-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
           <BackButton />
 
@@ -119,7 +121,8 @@ export function UserProfileContent({
         <TabsContent value="repos">
           <RepoList repos={repos} />
         </TabsContent>
-      </Tabs>
+        </Tabs>
+      </ErrorBoundary>
     </div>
   );
 }
