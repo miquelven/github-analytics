@@ -20,9 +20,7 @@ import type {
   GithubEvent,
   ContributionCalendar,
 } from "@/types/github";
-import { LayoutDashboard, Briefcase, FolderGit2, Printer } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { exportToPDF } from "@/lib/export";
+import { LayoutDashboard, Briefcase, FolderGit2 } from "lucide-react";
 import { ErrorBoundary } from "@/components/observability/error-boundary";
 
 interface UserProfileContentProps {
@@ -73,15 +71,6 @@ export function UserProfileContent({
                 </TabsTrigger>
               </TabsList>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={exportToPDF}
-                  title="Print / Save as PDF"
-                  className="no-print"
-                >
-                  <Printer className="h-4 w-4" />
-                </Button>
                 <ShareProfileButton username={user.login} />
               </div>
             </div>

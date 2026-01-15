@@ -21,15 +21,18 @@ export function RepoContributors({ contributors }: RepoContributorsProps) {
       <CardHeader>
         <CardTitle>{t.repo.contributors}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="max-h-80 overflow-y-auto pr-1">
         <div className="flex flex-col gap-4">
           {contributors.map((contributor) => (
             <div
               key={contributor.id}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between gap-2"
             >
-              <div className="flex items-center gap-3">
-                <Link href={`/user/${contributor.login}`}>
+              <div className="flex items-center gap-3 min-w-0">
+                <Link
+                  href={`/user/${contributor.login}`}
+                  className="flex-shrink-0"
+                >
                   <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={contributor.avatar_url}
@@ -44,12 +47,12 @@ export function RepoContributors({ contributors }: RepoContributorsProps) {
                 </Link>
                 <Link
                   href={`/user/${contributor.login}`}
-                  className="font-medium hover:underline"
+                  className="font-medium hover:underline truncate"
                 >
                   {contributor.login}
                 </Link>
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-muted-foreground whitespace-nowrap flex-shrink-0">
                 {contributor.contributions} {t.repo.commits}
               </div>
             </div>

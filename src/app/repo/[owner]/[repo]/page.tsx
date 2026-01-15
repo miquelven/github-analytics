@@ -71,13 +71,20 @@ export default async function RepoPage({ params }: RepoPageProps) {
   let activityPeak: { date: string | null; count: number } | null = null;
 
   activityEntries.forEach(([date, count]) => {
-    if (!activityPeak || count > activityPeak.count || date > activityPeak.date!) {
+    if (
+      !activityPeak ||
+      count > activityPeak.count ||
+      date > activityPeak.date!
+    ) {
       activityPeak = { date, count };
     }
   });
 
   const mergedStarsForks = (() => {
-    const map = new Map<string, { date: string; stars: number; forks: number }>();
+    const map = new Map<
+      string,
+      { date: string; stars: number; forks: number }
+    >();
 
     starsTimeline.forEach((point) => {
       const existing = map.get(point.date) ?? {
@@ -112,14 +119,11 @@ export default async function RepoPage({ params }: RepoPageProps) {
 
       <RepoHeader repo={repoDetails} />
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
         <RepoLanguages languages={languages} />
         <RepoContributors contributors={contributors} />
         <RepoStargazers stargazers={stargazers} />
-        <RepoComplexity
-          fileCount={fileCount}
-          sizeKb={repoDetails.size}
-        />
+        <RepoComplexity fileCount={fileCount} sizeKb={repoDetails.size} />
         <RepoIssuesActivity
           issuesSummary={issuesSummary}
           activityPeak={activityPeak}

@@ -45,7 +45,7 @@ export function RepoIssuesActivity({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-xs text-muted-foreground">
             <span>
               {t.repo.openIssues} {issuesSummary.open.toLocaleString()}
             </span>
