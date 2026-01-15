@@ -69,8 +69,8 @@ export function RepoLanguages({ languages }: RepoLanguagesProps) {
         <CardTitle>{t.repo.languages}</CardTitle>
         <CardDescription>{t.repo.codebaseComposition}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="h-[250px] sm:h-[300px] w-full">
+      <CardContent className="flex items-center justify-center">
+        <div className="h-[220px] sm:h-[260px] w-full max-w-[260px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
