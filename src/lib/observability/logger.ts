@@ -1,14 +1,18 @@
-"use server";
+import "server-only";
 
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
-interface LogContext {
+export interface LogContext {
   [key: string]: unknown;
 }
 
 const isDev = process.env.NODE_ENV !== "production";
 
-const formatPayload = (level: LogLevel, message: string, context?: LogContext) => {
+const formatPayload = (
+  level: LogLevel,
+  message: string,
+  context?: LogContext
+) => {
   return {
     level,
     message,
@@ -37,6 +41,9 @@ export const logWarn = (message: string, context?: LogContext) => {
 
 export const logError = (message: string, context?: LogContext) => {
   const payload = formatPayload("error", message, context);
-  console.error("[App]", payload);
+  if (isDev) {
+    console.warn("[App][error]", payload);
+  } else {
+    console.error("[App]", payload);
+  }
 };
-
