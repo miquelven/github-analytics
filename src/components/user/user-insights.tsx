@@ -11,18 +11,11 @@ import {
   Award,
   Clock,
   Gauge,
-  Info,
   Eye,
   EyeOff,
 } from "lucide-react";
 import { differenceInYears, parseISO } from "date-fns";
 import { useLanguage } from "@/contexts/language-context";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import {
   GithubUser,
@@ -198,45 +191,30 @@ export function UserInsights({
             <Lightbulb className="h-5 w-5 text-yellow-500" />
             {t.user.insights.title}
           </CardTitle>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <Gauge className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium">Dev Score</span>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      className="rounded-full p-1 text-muted-foreground hover:text-foreground hover:bg-muted"
-                    >
-                      <Info className="h-4 w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p className="max-w-xs text-xs leading-relaxed">
-                      {t.user.insights.devScoreInfo}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
+          <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => setShowDevScore((prev) => !prev)}
-              className="rounded-full p-1 text-muted-foreground hover:text-foreground hover:bg-muted"
+              className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             >
+              <Gauge className="h-4 w-4 text-primary" />
+              <span>Dev Score</span>
               {showDevScore ? (
-                <EyeOff className="h-4 w-4" />
+                <EyeOff className="h-3 w-3" />
               ) : (
-                <Eye className="h-4 w-4" />
+                <Eye className="h-3 w-3" />
               )}
             </button>
-            {showDevScore && (
-              <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-bold">{devScore}</span>
-                <span className="text-xs text-muted-foreground">/ 100</span>
-              </div>
-            )}
+            <div
+              className={`flex items-baseline gap-1 text-right transition-all duration-300 transform ${
+                showDevScore
+                  ? "opacity-100 translate-y-0 scale-100"
+                  : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
+              }`}
+            >
+              <span className="text-2xl font-bold">{devScore}</span>
+              <span className="text-xs text-muted-foreground">/ 100</span>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
