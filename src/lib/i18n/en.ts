@@ -70,12 +70,21 @@ export const en = {
     },
     repos: {
       title: "Repositories",
-      subtitle: "Latest updated repositories",
+      subtitle: "Explore repositories",
       filter: "Filter repositories...",
       private: "Private",
       public: "Public",
       noDescription: "No description provided.",
       noResults: "No repositories found matching your filter.",
+      sortBy: "Sort by",
+      sort: {
+        impact: "Impact",
+        growth: "Growth",
+        activity: "Recent Activity",
+        tech: "Technology",
+        stars: "Stars",
+      },
+      allTechs: "All Technologies",
     },
     insights: {
       title: "AI Insights & Achievements",

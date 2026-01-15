@@ -70,12 +70,21 @@ export const pt = {
     },
     repos: {
       title: "Repositórios",
-      subtitle: "Últimos repositórios atualizados",
+      subtitle: "Explore os repositórios",
       filter: "Filtrar repositórios...",
       private: "Privado",
       public: "Público",
       noDescription: "Nenhuma descrição fornecida.",
       noResults: "Nenhum repositório encontrado com esse filtro.",
+      sortBy: "Ordenar por",
+      sort: {
+        impact: "Impacto",
+        growth: "Crescimento",
+        activity: "Atividade Recente",
+        tech: "Tecnologia",
+        stars: "Estrelas",
+      },
+      allTechs: "Todas as Tecnologias",
     },
     insights: {
       title: "Insights & Conquistas de IA",
