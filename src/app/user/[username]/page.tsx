@@ -46,7 +46,12 @@ export default async function UserPage({ params }: UserPageProps) {
 
       <UserHeader user={user} />
 
-      <UserInsights user={user} repos={repos} />
+      <UserInsights
+        user={user}
+        repos={repos}
+        events={events}
+        contributions={contributions}
+      />
 
       <ProfileReadme content={readme} />
 
