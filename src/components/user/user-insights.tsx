@@ -77,11 +77,11 @@ export function UserInsights({
   const languages = new Set(repos.map((r) => r.language).filter(Boolean));
   const publicReposCount = repos.filter((r) => !r.private && !r.fork).length;
 
-  const starsScore = Math.min(totalStars / 10, 30);
-  const commitsScore = Math.min(totalCommitsLast90Days / 20, 25);
-  const frequencyScore = Math.min(activeDaysLast90 / 5, 20);
+  const starsScore = Math.min(totalStarsFromRepos / 20, 20);
+  const commitsScore = Math.min(totalCommitsLast90Days / 15, 30);
+  const frequencyScore = Math.min(activeDaysLast90 / 3, 25);
   const languagesScore = Math.min(languages.size * 3, 15);
-  const publicProjectsScore = Math.min(publicReposCount, 10);
+  const publicProjectsScore = Math.min(publicReposCount / 2, 10);
 
   const devScore = Math.round(
     starsScore +
