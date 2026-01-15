@@ -28,7 +28,7 @@ export function ProfileReadme({ content }: ProfileReadmeProps) {
         <ScrollArea className="h-[400px] w-full rounded-md border p-4 bg-white dark:bg-black/20">
           <div
             className="markdown-body"
-            style={{ backgroundColor: "transparent" }}
+            style={{ backgroundColor: "transparent", color: "var(--foreground)" }}
           >
             <ReactMarkdown rehypePlugins={[rehypeRaw]}>{content}</ReactMarkdown>
           </div>
