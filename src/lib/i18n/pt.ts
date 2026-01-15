@@ -69,6 +69,15 @@ export const pt = {
       overview: "Visão Geral",
       repositories: "Repositórios",
       activity: "Atividade",
+      recruiter: "Modo Recruiter",
+    },
+    recruiter: {
+      summary: "Resumo Profissional",
+      experience: "{years} anos de experiência",
+      topSkills: "Principais Habilidades",
+      featuredProjects: "Projetos em Destaque",
+      activityOverview: "Visão Geral de Atividade",
+      contributionsLastYear: "Contribuições no último ano",
     },
     repos: {
       title: "Repositórios",

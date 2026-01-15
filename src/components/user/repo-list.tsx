@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Star,
@@ -19,10 +20,12 @@ import {
   TrendingUp,
   Clock,
   Code,
+  Download,
 } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
+import { exportReposToCSV } from "@/lib/export";
 
 import { GithubRepo } from "@/types/github";
 
@@ -140,11 +143,21 @@ export function RepoList({ repos }: RepoListProps) {
           </div>
         </div>
         <div className="pt-4 space-y-4">
-          <Input
-            placeholder={t.user.repos.filter}
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          />
+          <div className="flex gap-2">
+            <Input
+              placeholder={t.user.repos.filter}
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => exportReposToCSV(sortedRepos, "repositories")}
+              title="Export CSV"
+            >
+              <Download className="h-4 w-4" />
+            </Button>
+          </div>
 
           {sortBy === "tech" && (
             <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-top-2">

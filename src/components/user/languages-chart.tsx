@@ -16,14 +16,17 @@ import {
   Legend,
 } from "recharts";
 import { useLanguage } from "@/contexts/language-context";
+import { cn } from "@/lib/utils";
+import { ChartDownloadButton } from "@/components/chart-download-button";
 
 import { GithubRepo } from "@/types/github";
 
 interface LanguagesChartProps {
   repos: GithubRepo[];
+  className?: string;
 }
 
-export function LanguagesChart({ repos }: LanguagesChartProps) {
+export function LanguagesChart({ repos, className }: LanguagesChartProps) {
   const { t } = useLanguage();
   const languagesMap = repos.reduce((acc: Record<string, number>, repo) => {
     if (repo.language) {
@@ -41,7 +44,7 @@ export function LanguagesChart({ repos }: LanguagesChartProps) {
 
   if (data.length === 0) {
     return (
-      <Card className="col-span-1">
+      <Card className={cn("col-span-1", className)}>
         <CardHeader>
           <CardTitle>{t.user.languages.title}</CardTitle>
           <CardDescription>{t.user.languages.description}</CardDescription>
@@ -54,13 +57,14 @@ export function LanguagesChart({ repos }: LanguagesChartProps) {
   }
 
   return (
-    <Card className="col-span-1">
+    <Card className={cn("col-span-1 group relative", className)}>
+      <ChartDownloadButton elementId="languages-chart" filename="languages-chart" />
       <CardHeader>
         <CardTitle>{t.user.languages.title}</CardTitle>
         <CardDescription>{t.user.languages.description}</CardDescription>
       </CardHeader>
       <CardContent className="pl-0">
-        <div className="h-[300px] w-full">
+        <div id="languages-chart" className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

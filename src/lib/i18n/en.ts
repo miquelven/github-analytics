@@ -69,6 +69,15 @@ export const en = {
       overview: "Overview",
       repositories: "Repositories",
       activity: "Activity",
+      recruiter: "Recruiter Mode",
+    },
+    recruiter: {
+      summary: "Professional Summary",
+      experience: "{years} years of experience",
+      topSkills: "Top Skills",
+      featuredProjects: "Featured Projects",
+      activityOverview: "Activity Overview",
+      contributionsLastYear: "Contributions in the last year",
     },
     repos: {
       title: "Repositories",

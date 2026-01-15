@@ -26,13 +26,20 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import { cn } from "@/lib/utils";
+import { ChartDownloadButton } from "@/components/chart-download-button";
 
 interface UserActivityProps {
   events: GithubEvent[];
   contributions?: ContributionCalendar | null;
+  className?: string;
 }
 
-export function UserActivity({ events, contributions }: UserActivityProps) {
+export function UserActivity({
+  events,
+  contributions,
+  className,
+}: UserActivityProps) {
   const { t, language } = useLanguage();
   const { theme } = useTheme();
   const [granularity, setGranularity] = useState<"day" | "week" | "month">(
@@ -278,7 +285,9 @@ export function UserActivity({ events, contributions }: UserActivityProps) {
   }
 
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-3 mt-8">
+    <Card
+      className={cn("col-span-1 md:col-span-2 lg:col-span-3 mt-8", className)}
+    >
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Activity className="h-5 w-5" />
@@ -287,8 +296,12 @@ export function UserActivity({ events, contributions }: UserActivityProps) {
       </CardHeader>
       <CardContent className="space-y-8">
         {heatmapData.length > 0 && (
-          <div className="flex flex-col items-center justify-center p-4 border rounded-lg bg-card/50 w-full">
-            <div className="w-full overflow-x-auto pb-2">
+          <div className="flex flex-col items-center justify-center p-4 border rounded-lg bg-card/50 w-full group relative">
+            <ChartDownloadButton
+              elementId="activity-heatmap"
+              filename="activity-heatmap"
+            />
+            <div id="activity-heatmap" className="w-full overflow-x-auto pb-2">
               <div className="min-w-[600px] flex justify-center">
                 <ActivityCalendar
                   data={heatmapData}
@@ -377,37 +390,48 @@ export function UserActivity({ events, contributions }: UserActivityProps) {
                 </button>
               </div>
             </div>
-            <ChartContainer config={chartConfig} className="h-[220px] w-full">
-              <BarChart data={timelineData}>
-                <XAxis
-                  dataKey="label"
-                  tickLine={false}
-                  axisLine={false}
-                  minTickGap={16}
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  width={32}
-                  tickFormatter={(value: number) => value.toLocaleString()}
-                />
-                <ChartTooltip
-                  content={
-                    <ChartTooltipContent
-                      indicator="line"
-                      labelFormatter={(value) => value}
+            <div className="group relative w-full">
+              <ChartDownloadButton
+                elementId="activity-timeline"
+                filename="activity-timeline"
+              />
+              <div id="activity-timeline" className="w-full">
+                <ChartContainer
+                  config={chartConfig}
+                  className="h-[220px] w-full"
+                >
+                  <BarChart data={timelineData}>
+                    <XAxis
+                      dataKey="label"
+                      tickLine={false}
+                      axisLine={false}
+                      minTickGap={16}
                     />
-                  }
-                />
-                <Bar
-                  dataKey="count"
-                  fill="#22c55e"
-                  radius={[4, 4, 0, 0]}
-                  name="contributions"
-                />
-                <ChartLegend content={<ChartLegendContent />} />
-              </BarChart>
-            </ChartContainer>
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      width={32}
+                      tickFormatter={(value: number) => value.toLocaleString()}
+                    />
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          indicator="line"
+                          labelFormatter={(value) => value}
+                        />
+                      }
+                    />
+                    <Bar
+                      dataKey="count"
+                      fill="#22c55e"
+                      radius={[4, 4, 0, 0]}
+                      name="contributions"
+                    />
+                    <ChartLegend content={<ChartLegendContent />} />
+                  </BarChart>
+                </ChartContainer>
+              </div>
+            </div>
 
             {(mostActiveDay || mostActiveWeek || mostActiveMonth) && (
               <div className="space-y-1 text-xs text-muted-foreground">
