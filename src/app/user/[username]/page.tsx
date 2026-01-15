@@ -49,7 +49,7 @@ export async function generateMetadata({
 }
 
 export default async function UserPage({ params }: UserPageProps) {
-  const { username } = await params;
+  const { username } = params;
   const [user, repos, orgs, events, readme, contributions] = await Promise.all([
     getUser(username),
     getUserRepos(username),

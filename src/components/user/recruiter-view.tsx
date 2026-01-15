@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GithubUser, GithubRepo } from "@/types/github";
@@ -77,7 +72,7 @@ export function RecruiterView({ user, repos }: RecruiterViewProps) {
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground pt-2">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  {t.recruiter.experience.replace(
+                  {t.user.recruiter.experience.replace(
                     "{years}",
                     experienceYears.toString()
                   )}
@@ -104,7 +99,7 @@ export function RecruiterView({ user, repos }: RecruiterViewProps) {
         {/* Skills Column */}
         <Card className="md:col-span-1 h-full">
           <CardHeader>
-            <CardTitle>{t.recruiter.topSkills}</CardTitle>
+            <CardTitle>{t.user.recruiter.topSkills}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -139,7 +134,7 @@ export function RecruiterView({ user, repos }: RecruiterViewProps) {
         <div className="md:col-span-2 space-y-4">
           <h3 className="text-xl font-semibold flex items-center gap-2">
             <Star className="h-5 w-5 text-amber-500" />
-            {t.recruiter.featuredProjects}
+            {t.user.recruiter.featuredProjects}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {featuredProjects.map((repo) => (

@@ -94,7 +94,7 @@ export function UserInsights({
       publicProjectsScore
   );
 
-  const consistency = calculateConsistency(contributions);
+  const consistency = calculateConsistency(contributions ?? null);
   const automaticInsights = generateInsights(user, repos, consistency);
 
   const insights = automaticInsights.map((insight) => {
