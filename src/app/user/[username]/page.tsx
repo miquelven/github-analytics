@@ -11,9 +11,9 @@ import { UserProfileContent } from "@/components/user/user-profile-content";
 import { notFound } from "next/navigation";
 
 interface UserPageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
@@ -49,7 +49,7 @@ export async function generateMetadata({
 }
 
 export default async function UserPage({ params }: UserPageProps) {
-  const { username } = params;
+  const { username } = await params;
   const [user, repos, orgs, events, readme, contributions] = await Promise.all([
     getUser(username),
     getUserRepos(username),
