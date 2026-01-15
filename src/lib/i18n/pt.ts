@@ -95,6 +95,8 @@ export const pt = {
       prolificDesc: "{count}+ repositórios públicos",
       specialist: "Especialista em {lang}",
       specialistDesc: "Programa principalmente em {lang}",
+      devScoreInfo:
+        "Score de 0 a 100 baseado em: estrelas totais, commits recentes, dias com contribuições, diversidade de linguagens e quantidade de repositórios públicos.",
     },
     profileReadme: "README do Perfil",
     organizations: "Organizações",

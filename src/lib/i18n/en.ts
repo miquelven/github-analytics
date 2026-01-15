@@ -95,6 +95,8 @@ export const en = {
       prolificDesc: "{count}+ public repositories",
       specialist: "{lang} Specialist",
       specialistDesc: "Mostly codes in {lang}",
+      devScoreInfo:
+        "Score from 0 to 100 based on total stars, recent commits, active contribution days, language diversity and number of public repositories.",
     },
     profileReadme: "Profile README",
     organizations: "Organizations",

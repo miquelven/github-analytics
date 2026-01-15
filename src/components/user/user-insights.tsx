@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Lightbulb,
@@ -10,9 +11,18 @@ import {
   Award,
   Clock,
   Gauge,
+  Info,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { differenceInYears, parseISO } from "date-fns";
 import { useLanguage } from "@/contexts/language-context";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import {
   GithubUser,
@@ -36,6 +46,7 @@ export function UserInsights({
 }: UserInsightsProps) {
   const { t } = useLanguage();
   const insights = [];
+  const [showDevScore, setShowDevScore] = useState(false);
 
   const totalStarsFromRepos = repos.reduce(
     (acc, repo) => acc + repo.stargazers_count,
@@ -191,11 +202,41 @@ export function UserInsights({
             <div className="flex items-center gap-2">
               <Gauge className="h-5 w-5 text-primary" />
               <span className="text-sm font-medium">Dev Score</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="rounded-full p-1 text-muted-foreground hover:text-foreground hover:bg-muted"
+                    >
+                      <Info className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p className="max-w-xs text-xs leading-relaxed">
+                      {t.user.insights.devScoreInfo}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-            <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold">{devScore}</span>
-              <span className="text-xs text-muted-foreground">/ 100</span>
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowDevScore((prev) => !prev)}
+              className="rounded-full p-1 text-muted-foreground hover:text-foreground hover:bg-muted"
+            >
+              {showDevScore ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </button>
+            {showDevScore && (
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold">{devScore}</span>
+                <span className="text-xs text-muted-foreground">/ 100</span>
+              </div>
+            )}
           </div>
         </CardHeader>
         <CardContent>
