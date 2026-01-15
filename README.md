@@ -9,38 +9,81 @@
 
 ## 📖 Sobre o Projeto
 
-O **GitHub Analytics** é uma aplicação web desenvolvida para fornecer insights profundos sobre usuários e repositórios do GitHub. Com uma interface moderna e responsiva, o projeto permite que desenvolvedores e recrutadores visualizem métricas, hábitos de commit, tecnologias mais utilizadas e muito mais.
+O **GitHub Analytics** é uma aplicação web para análise aprofundada de **usuários** e **repositórios** do GitHub.
 
-O projeto utiliza a **GitHub API** para buscar dados em tempo real e apresenta as informações através de gráficos interativos e componentes visuais intuitivos.
+Ele combina dados da **GitHub REST API** e da **GraphQL API** para exibir:
+
+- Métricas de perfil (seguidores, repositórios, gists, destaque de projetos).
+- Hábitos de contribuição ao longo do tempo.
+- Distribuição de linguagens.
+- Complexidade aproximada de repositórios.
+- Insights automáticos sobre o perfil do desenvolvedor.
+
+Tudo isso em uma interface moderna, responsiva e com:
+
+- **Modo claro e escuro**;
+- **Internacionalização (pt-BR e en-US)**;
+- Experiência pensada também para **recrutadores**.
 
 ## ✨ Funcionalidades Principais
 
-- **🔍 Análise de Perfil de Usuário**:
+### 👤 Análise de Perfil de Usuário
 
-  - Visão geral do perfil com estatísticas principais.
-  - **Heatmap de Contribuições** interativo.
-  - Gráficos de distribuição de linguagens.
-  - Lista de repositórios e organizações.
+- Visão geral do perfil (avatar, nome, bio, seguidores, repositórios).
+- **Heatmap de contribuições** interativo.
+- Gráfico de **principais linguagens** utilizadas.
+- Lista de repositórios com:
+  - Busca por nome.
+  - Ordenação por impacto, crescimento, atividade recente ou tecnologia.
+  - Filtro por linguagem.
+- Exibição de organizações do usuário.
+- Renderização do **README de perfil**, quando disponível.
 
-- **📦 Detalhes de Repositórios**:
+### 🧠 Insights & Dev Score
 
-  - Visualização detalhada de qualquer repositório público.
-  - Renderização do `README.md` diretamente na aplicação.
-  - Análise de contribuidores e linguagens utilizadas.
+- Cálculo de:
+  - Distribuição de linguagens.
+  - Consistência de contribuições (dias ativos, maior streak, média por dia).
+  - Score de consistência de 0 a 100.
+- Classificação do tipo de perfil: `Focused`, `Generalist` ou `Balanced`.
+- Geração de insights automáticos (qualidade, rising star, influência social, etc.).
 
-- **🆚 Comparação (Versus)**:
+### 🧑‍💼 Recruiter Mode
 
-  - Compare dois perfis lado a lado para ver quem tem mais contribuições, seguidores, etc.
-  - Ideal para benchmarks e análises competitivas.
+- Visão especial voltada para recrutadores:
+  - Resumo profissional do usuário.
+  - Destaque para projetos mais relevantes ordenados por impacto.
+  - Layout simplificado e amigável para impressão.
 
-- **📈 Trending**:
+### 📦 Detalhes de Repositórios
 
-  - Descubra o que está em alta no GitHub no momento.
+- Visualização detalhada de qualquer repositório público:
+  - Cabeçalho com estrelas, forks, watchers, license e datas.
+  - Gráfico de linguagens por bytes.
+  - Lista de top contribuidores.
+  - Últimos stargazers.
+  - Resumo de issues abertas/fechadas e pico de atividade.
+  - Estimativa de complexidade (número de arquivos e tamanho aproximado).
+  - Timeline cumulativa de stars e forks ao longo do tempo.
 
-- **🎨 UI/UX Moderna**:
-  - **Dark Mode** e Light Mode totalmente suportados.
-  - **Internacionalização (i18n)**: Suporte para Português (BR) e Inglês (US).
-  - Design responsivo e acessível com Shadcn UI e Tailwind CSS.
+### 🆚 Comparação (Versus)
+
+- Comparação lado a lado entre dois perfis:
+  - Score calculado com base em seguidores, repositórios, gists e consistência.
+  - Destaque visual para o vencedor.
+  - Comparativo de métricas principais (followers, following, repos, gists).
+
+### 📈 Trending
+
+- Descubra o que está em alta no GitHub:
+  - Repositórios em destaque (estrelas, linguagem, descrição).
+  - Usuários em alta.
+
+### 🎨 UI/UX Moderna
+
+- **Dark Mode** e **Light Mode** totalmente suportados.
+- **Internacionalização (i18n)**: suporte para Português (BR) e Inglês (US).
+- Design responsivo e acessível com Shadcn UI e Tailwind CSS.
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -68,7 +111,7 @@ Siga os passos abaixo para rodar o projeto em sua máquina local.
 1.  **Clone o repositório**:
 
     ```bash
-    git clone https://github.com/seu-usuario/github-analytics.git
+    git clone https://github.com/miquelven/github-analytics.git
     cd github-analytics
     ```
 
@@ -128,7 +171,3 @@ Contribuições são sempre bem-vindas! Sinta-se à vontade para abrir uma issue
 3.  Faça o Commit de suas mudanças (`git commit -m 'Adiciona: MinhaFeature'`)
 4.  Faça o Push para a Branch (`git push origin feature/MinhaFeature`)
 5.  Abra um Pull Request
-
----
-
-Feito com 💜 por [Miquelven](https://github.com/miquelven)
