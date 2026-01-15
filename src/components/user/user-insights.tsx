@@ -127,10 +127,6 @@ export function UserInsights({
     });
   }
 
-  const totalStars = repos.reduce(
-    (acc, repo) => acc + repo.stargazers_count,
-    0
-  );
   if (totalStarsFromRepos > 500) {
     insights.push({
       icon: <Star className="h-4 w-4" />,
@@ -143,7 +139,6 @@ export function UserInsights({
     });
   }
 
-  const languages = new Set(repos.map((r) => r.language).filter(Boolean));
   if (languages.size > 5) {
     insights.push({
       icon: <Code className="h-4 w-4" />,
