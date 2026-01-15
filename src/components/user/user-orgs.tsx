@@ -34,7 +34,7 @@ export function UserOrgs({ orgs }: UserOrgsProps) {
               <Avatar className="h-12 w-12 border-2 border-background shadow-sm hover:scale-110 transition-transform">
                 <AvatarImage src={org.avatar_url} alt={org.login} />
                 <AvatarFallback>
-                  {org.login.slice(0, 2).toUpperCase()}
+                  {org.login ? org.login.slice(0, 2).toUpperCase() : "??"}
                 </AvatarFallback>
               </Avatar>
             </Link>

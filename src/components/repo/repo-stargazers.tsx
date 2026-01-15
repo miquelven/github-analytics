@@ -39,7 +39,7 @@ export function RepoStargazers({ stargazers }: RepoStargazersProps) {
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user.avatar_url} alt={user.login} />
                       <AvatarFallback>
-                        {user.login.slice(0, 2).toUpperCase()}
+                        {user.login ? user.login.slice(0, 2).toUpperCase() : "??"}
                       </AvatarFallback>
                     </Avatar>
                   </Link>

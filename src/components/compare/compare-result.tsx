@@ -75,7 +75,7 @@ export function CompareResult({
           <Avatar className="h-24 w-24 border-4 border-background shadow-xl">
             <AvatarImage src={user.avatar_url} alt={user.login} />
             <AvatarFallback>
-              {user.login.slice(0, 2).toUpperCase()}
+              {user.login ? user.login.slice(0, 2).toUpperCase() : "??"}
             </AvatarFallback>
           </Avatar>
         </div>

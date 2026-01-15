@@ -36,7 +36,9 @@ export function RepoContributors({ contributors }: RepoContributorsProps) {
                       alt={contributor.login}
                     />
                     <AvatarFallback>
-                      {contributor.login.slice(0, 2).toUpperCase()}
+                      {contributor.login
+                        ? contributor.login.slice(0, 2).toUpperCase()
+                        : "??"}
                     </AvatarFallback>
                   </Avatar>
                 </Link>
