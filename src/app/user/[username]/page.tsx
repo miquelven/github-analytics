@@ -6,6 +6,7 @@ import {
   getRepoReadme,
   getUserContributions,
 } from "@/lib/github";
+import { Metadata } from "next";
 import { UserHeader } from "@/components/user/user-header";
 import { UserStats } from "@/components/user/user-stats";
 import { LanguagesChart } from "@/components/user/languages-chart";
@@ -15,11 +16,44 @@ import { UserActivity } from "@/components/user/user-activity";
 import { ProfileReadme } from "@/components/user/profile-readme";
 import { UserInsights } from "@/components/user/user-insights";
 import { BackButton } from "@/components/back-button";
+import { ShareProfileButton } from "@/components/user/share-profile-button";
 import { notFound } from "next/navigation";
 
 interface UserPageProps {
   params: {
     username: string;
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: UserPageProps): Promise<Metadata> {
+  const { username } = await params;
+  const user = await getUser(username);
+
+  if (!user) {
+    return {
+      title: "User Not Found - GitHub Analytics",
+    };
+  }
+
+  return {
+    title: `${user.name || user.login} - GitHub Analytics Profile`,
+    description: `Check out ${
+      user.name || user.login
+    }'s GitHub statistics, insights, and top repositories on GitHub Analytics.`,
+    openGraph: {
+      title: `${user.name || user.login} - GitHub Analytics Profile`,
+      description: user.bio || `GitHub analytics for ${user.login}`,
+      images: [user.avatar_url],
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${user.name || user.login} - GitHub Analytics`,
+      description: user.bio || `GitHub analytics for ${user.login}`,
+      images: [user.avatar_url],
+    },
   };
 }
 
@@ -42,6 +76,7 @@ export default async function UserPage({ params }: UserPageProps) {
     <div className="container mx-auto py-8 px-4">
       <div className="mb-6 flex items-center justify-between">
         <BackButton />
+        <ShareProfileButton username={username} />
       </div>
 
       <UserHeader user={user} />

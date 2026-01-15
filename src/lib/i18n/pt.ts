@@ -23,6 +23,8 @@ export const pt = {
       dark: "Escuro",
       system: "Sistema",
     },
+    shareProfile: "Compartilhar Perfil",
+    copied: "Link Copiado!",
     notFound: {
       title: "Usuário Não Encontrado",
       description:

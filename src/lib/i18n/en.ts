@@ -23,6 +23,8 @@ export const en = {
       dark: "Dark",
       system: "System",
     },
+    shareProfile: "Share Profile",
+    copied: "Link Copied!",
     notFound: {
       title: "User Not Found",
       description:
